@@ -18,6 +18,7 @@
   "homepage": "https://github.com/RavelloH/kv-cache#readme",
   "dependencies": {
     "@vercel/client": "^13.0.6",
+    "@vercel/kv": "^1.0.0",
     "@vercel/ncc": "^0.38.1"
   }
 }
