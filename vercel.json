@@ -1,0 +1,17 @@
+{
+    "rewrites": [{
+        "source": "/",
+        "destination": "/api/main?check=true"
+    },
+        {
+            "source": "/(.*)",
+            "destination": "/api/main?uuid=$1"
+        }],
+    "headers": [{
+        "source": "/(.*)",
+        "headers": [{
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+        }]
+    }]
+}

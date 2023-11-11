@@ -121,8 +121,15 @@ const readData = async (req) => {
     const {
         uuid,
         password,
-        shouldDelete: shouldDelete
+        shouldDelete
     } = req.body;
+
+    if (!uuid) {
+        return {
+            code: 400,
+            message: "请提供查询的uuid"
+        }
+    }
 
     // 检查 UUID 是否存在于 KV 缓存中
     const storedData = await kv.get(uuid);
@@ -155,10 +162,10 @@ const readData = async (req) => {
     if (shouldDelete) {
         await kv.del(uuid);
     }
-    
+
     return {
         code: 200,
-        message: `查询成功${shouldDelete ? ',已删除此记录' : ''}`,
+        message: `查询成功${shouldDelete ? ',已删除此记录': ''}`,
         data: storedData.data,
     };
 };
@@ -180,8 +187,17 @@ export default async function handler(req, res) {
             const response = await writeData(req);
             res.status(response.code).json(response);
         } else if (req.method === "GET") {
-            const response = await readData(req);
-            res.status(response.code).json(response);
+            if (req.query.check = 'true' && !req.body.uuid) {
+                let dbsize = await kv.dbsize()
+                res.status(200).json({
+                    code: 200,
+                    message: '服务运行正常,活跃存储量:'+dbsize,
+                    version: '1.0.0'
+                });
+            } else {
+                const response = await readData(req);
+                res.status(response.code).json(response);
+            }
         } else {
             res.status(405).json({
                 code: 405,
