@@ -4,21 +4,26 @@ import {
 
 // 检查IP是否符合
 function checkIP(safeIP, realIP) {
-    if (safeIP.includes('-')) {
-        const rangePattern = safeIP.replace(/\./g, '\\.').replace(/(\d+)-(\d+)/, function(match, start, end) {
-            start = parseInt(start);
-            end = parseInt(end);
-            return '(' + Array.from({
-                length: end - start + 1
-            }, (_, i) => start + i).join('|') + ')';
-        });
-        const regex = new RegExp('^' + rangePattern + '$');
-        return regex.test(realIP);
-    } else {
-        const pattern = safeIP.replace(/\*/g, '\\d{1,3}');
-        const regex = new RegExp('^' + pattern + '$');
-        return regex.test(realIP);
+    const ipParts = realIP.split('.');
+    const safeIPParts = safeIP.split('.');
+
+    for (let i = 0; i < 4; i++) {
+        if (safeIPParts[i] === '*') {
+            continue;
+        } else if (safeIPParts[i].includes('-')) {
+            const range = safeIPParts[i].split('-');
+            const start = parseInt(range[0]);
+            const end = parseInt(range[1]);
+            const ipPart = parseInt(ipParts[i]);
+            if (ipPart < start || ipPart > end) {
+                return false;
+            }
+        } else if (safeIPParts[i] !== ipParts[i]) {
+            return false;
+        }
     }
+
+    return true;
 }
 
 // 检查uuid有效性
@@ -97,7 +102,7 @@ const writeData = async (req) => {
     }
 
     // 存储到 KV 缓存中
-    const storedUUID = checkUUIDFormat(uuid || '') ? uuid.toLowerCase() : generateUUID().toLowerCase();
+    const storedUUID = checkUUIDFormat(uuid || '') ? uuid.toLowerCase(): generateUUID().toLowerCase();
     await kv.set(storedUUID, {
         data: data,
         ip: safeIP || '*.*.*.*',
@@ -201,8 +206,7 @@ const deleteData = async (req) => {
 
     return {
         code: state == 1 ? 200: 400,
-        message: `${state == 1 ? '删除成功': '删除失败，无此存储'}`,
-        data: storedData.data,
+        message: `${state == 1 ? '删除成功': '删除失败，无此存储'}`
     };
 };
 
