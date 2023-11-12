@@ -155,6 +155,7 @@ const readData = async (req) => {
     }
 
     // 检测IP验证
+    console.log(storedData.safeIP, req.headers["x-real-ip"])
     if (!checkIP(storedData.safeIP, req.headers["x-real-ip"] ||
         req.headers['x-forwarded-for'] ||
         req.ip ||
