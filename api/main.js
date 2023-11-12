@@ -155,7 +155,13 @@ const readData = async (req) => {
     }
 
     // 检测IP验证
-    if (!checkIP(storedData.safeIP, req.headers["x-real-ip"])) {
+    if (!checkIP(storedData.safeIP, req.headers["x-real-ip"] ||
+        req.headers['x-forwarded-for'] ||
+        req.ip ||
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        req.connection.socket.remoteAddress)
+    ) {
         return {
             code: 403,
             message: "当前访问IP无此数据的访问权限"
@@ -163,11 +169,13 @@ const readData = async (req) => {
     }
 
     // 检查是否需要密码，并验证密码是否与存储的密码匹配
-    if (password && password !== storedData.password) {
-        return {
-            code: 401,
-            message: "无效的密码"
-        };
+    if (storedData.password) {
+        if (password !== storedData.password) {
+            return {
+                code: 401,
+                message: "无效的密码"
+            }
+        }
     }
 
     // 如果设置了删除标志，从 KV 缓存中删除数据
