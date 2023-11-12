@@ -97,7 +97,7 @@ const writeData = async (req) => {
     }
 
     // 存储到 KV 缓存中
-    const storedUUID = checkUUIDFormat(uuid || '') ? uuid: generateUUID();
+    const storedUUID = checkUUIDFormat(uuid || '') ? uuid.toLowerCase() : generateUUID().toLowerCase();
     await kv.set(storedUUID, {
         data: data,
         ip: safeIP || '*.*.*.*',
@@ -131,8 +131,15 @@ const readData = async (req) => {
         }
     }
 
+    if (!checkUUIDFormat(uuid)) {
+        return {
+            code: 400,
+            message: 'uuid格式错误'
+        }
+    }
+
     // 检查 UUID 是否存在于 KV 缓存中
-    const storedData = await kv.get(uuid);
+    const storedData = await kv.get(uuid.toLowerCase());
 
     // 如果 UUID 不存在，则返回错误
     if (!storedData) {
@@ -170,6 +177,35 @@ const readData = async (req) => {
     };
 };
 
+// 删除数据
+const deleteData = async (req) => {
+    const {
+        uuid,
+    } = req.body;
+
+    if (!uuid) {
+        return {
+            code: 400,
+            message: "请提供删除的uuid"
+        }
+    }
+
+    if (!checkUUIDFormat(uuid)) {
+        return {
+            code: 400,
+            message: 'uuid格式错误'
+        }
+    }
+
+    const state = await kv.del(uuid.toLowerCase());
+
+    return {
+        code: state == 1 ? 200: 400,
+        message: `${state == 1 ? '删除成功': '删除失败，无此存储'}`,
+        data: storedData.data,
+    };
+};
+
 // 生成随机 UUID
 const generateUUID = () => {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -184,20 +220,29 @@ export default async function handler(req, res) {
     try {
         // 检查请求方法
         if (req.method === "POST") {
-            const response = await writeData(req);
-            res.status(response.code).json(response);
-        } else if (req.method === "GET") {
-            if (req.query.check = 'true' && !req.body.uuid) {
-                let dbsize = await kv.dbsize()
-                res.status(200).json({
-                    code: 200,
-                    message: '服务运行正常,活跃存储量:'+dbsize,
-                    version: '1.0.0'
-                });
-            } else {
+            if (req.query.mode = 'set') {
+                const response = await writeData(req);
+                res.status(response.code).json(response);
+            } else if (req.query.mode = 'get') {
                 const response = await readData(req);
                 res.status(response.code).json(response);
+            } else if (req.query.mode = 'del') {
+                const response = await deleteData(req);
+                res.status(response.code).json(response);
+            } else {
+                res.status(400).json({
+                    code: 400,
+                    message: '无效的请求模式'
+                });
             }
+        } else if (req.method === "GET") {
+            let dbsize = await kv.dbsize()
+            res.status(200).json({
+                code: 200,
+                message: '服务运行正常',
+                version: '1.0.0',
+                active: dbsize
+            });
         } else {
             res.status(405).json({
                 code: 405,
