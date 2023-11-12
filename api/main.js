@@ -223,11 +223,11 @@ export default async function handler(req, res) {
             if (req.query.mode == 'set') {
                 const response = await writeData(req);
                 res.status(response.code).json(response);
-            } else if (req.query.mode = 'get') {
-                const response == await readData(req);
+            } else if (req.query.mode == 'get') {
+                const response = await readData(req);
                 res.status(response.code).json(response);
-            } else if (req.query.mode = 'del') {
-                const response == await deleteData(req);
+            } else if (req.query.mode == 'del') {
+                const response = await deleteData(req);
                 res.status(response.code).json(response);
             } else {
                 res.status(400).json({
