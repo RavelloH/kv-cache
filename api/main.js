@@ -255,9 +255,14 @@ export default async function handler(req, res) {
                 version: '1.0.0',
                 active: dbsize
             });
-        } else if (req.method === "OPTIONS"){
+        } else if (req.method === "OPTIONS") {
             res.status(200).json({
                 code: 200
+            });
+        } else {
+            res.status(405).json({
+                code: 405,
+                message: "不允许的请求方式"
             });
         }
     } catch (error) {
