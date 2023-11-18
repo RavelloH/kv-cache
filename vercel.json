@@ -33,9 +33,5 @@
                 "key": "Access-Control-Allow-Methods",
                 "value": "POST,GET"
             }]
-    }],
-    "rewrites": [{
-        "source": "/",
-        "destination": "/api/check"
     }]
 }
