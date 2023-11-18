@@ -24,6 +24,18 @@
         "headers": [{
             "key": "Access-Control-Allow-Origin",
             "value": "*"
-        }]
+        },
+            {
+                "key": "Access-Control-Allow-Headers",
+                "value": "content-type"
+            },
+            {
+                "key": "Access-Control-Allow-Methods",
+                "value": "POST,GET"
+            }]
+    }],
+    "rewrites": [{
+        "source": "/",
+        "destination": "/api/check"
     }]
 }
