@@ -62,6 +62,9 @@
 ```javascript
 fetch('https://cache.ravelloh.top/api?mode=set', {
   method: 'POST',
+  headers: {
+        'Content-Type': 'application/json'
+  },
   body: JSON.stringify({
     data: 'Hello, World!',
     password: '123456',
@@ -80,6 +83,9 @@ fetch('https://cache.ravelloh.top/api?mode=set', {
 ```javascript
 fetch('https://cache.ravelloh.top/api?mode=get', {
   method: 'POST',
+  headers: {
+        'Content-Type': 'application/json'
+  },
   body: JSON.stringify({
     uuid: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx',
     password: '123456',
@@ -96,6 +102,9 @@ fetch('https://cache.ravelloh.top/api?mode=get', {
 ```javascript
 fetch('https://cache.ravelloh.top/api?mode=del', {
   method: 'POST',
+  headers: {
+        'Content-Type': 'application/json'
+  },
   body: JSON.stringify({
     uuid: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
   })
