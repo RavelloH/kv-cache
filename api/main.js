@@ -187,6 +187,10 @@ const readData = async (req) => {
         code: 200,
         message: `查询成功${shouldDelete ? ',已删除此记录': ''}`,
         data: storedData.data,
+        uuid: uuid,
+        expiredAt: getISOTimeAfterMilliseconds(storedData.expiredAt),
+        password: storedData.password,
+        safeIP: storedData.safeIP
     };
 };
 
