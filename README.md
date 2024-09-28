@@ -31,12 +31,22 @@
 
 ### 读取数据
 
+> 请求数据有两种方法，可以以POST的方式请求，返回json格式的数据，或者以GET的方式请求，返回文本格式的数据
+
 - 请求方法：POST
 - 请求路径：`/api?mode=get`或`/get`
 - 请求参数：
   - uuid：要读取的数据的唯一标识（必选）
   - password：访问数据时的密码（可选）
   - shouldDelete：是否在读取数据后删除数据（可选，默认为false）
+
+- 请求方法：GET
+- 请求路径：`/api` 或  `/`
+- 查询参数：
+  - uuid：要读取的数据的唯一标识（必选）
+  - password：访问数据时的密码（可选）
+  - shouldDelete：是否在读取数据后删除数据（可选，默认为false）
+- 例子：`https://cache.ravelloh.top/?uuid=xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx&password=123456&shouldDelete=true`
 
 ### 删除数据
 
