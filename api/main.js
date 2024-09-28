@@ -112,7 +112,7 @@ const writeData = async (req) => {
       data: data,
       ip: safeIP || "*.*.*.*",
       password: password,
-      expiredTime: expiredTime,
+      expiredTime: expiredTime+Date.now() % 1000,
     },
     {
       px: expiredTime,
@@ -237,11 +237,18 @@ const readData = async (req) => {
     message: `查询成功${shouldDelete ? ",已删除此记录" : ""}`,
     data: storedData.data,
     uuid: uuid,
-    expiredAt: getISOTimeAfterMilliseconds(storedData.expiredTime),
+    expiredAt: msToIso(storedData.expiredTime),
     password: storedData.password,
     safeIP: storedData.ip,
   };
 };
+
+function msToIso(timestamp) {
+  timestamp = parseInt(timestamp);
+  const date = new Date(timestamp);
+  const iso = date.toISOString();
+  return iso;
+}
 
 // 删除数据
 const deleteData = async (req) => {
