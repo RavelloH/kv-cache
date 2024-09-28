@@ -112,7 +112,7 @@ const writeData = async (req) => {
       data: data,
       ip: safeIP || "*.*.*.*",
       password: password,
-      expiredTime: expiredTime+Date.now() % 1000,
+      expiredTime: expiredTime+Date.now(),
     },
     {
       px: expiredTime,
