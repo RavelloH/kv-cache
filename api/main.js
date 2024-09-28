@@ -50,6 +50,8 @@ function checkIPFormat(ip) {
 
 // 时间戳转换
 function getISOTimeAfterMilliseconds(x) {
+  // x是字符串，转数字
+  x = parseInt(x);
   let currentTime = new Date().getTime();
   let newTime = currentTime + x;
   return new Date(newTime).toISOString();
