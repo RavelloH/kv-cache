@@ -209,12 +209,44 @@ const deleteData = async (req) => {
             message: 'uuid格式错误'
         }
     }
+    const storedData = await kv.get(uuid.toLowerCase());
+
+    if (!storedData) {
+        return {
+            code: 404,
+            message: "未找到数据"
+        };
+    }
+
+    // 检测IP验证
+    if (!checkIP(storedData.ip, req.headers["x-real-ip"] ||
+        req.headers['x-forwarded-for'] ||
+        req.ip ||
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        req.connection.socket.remoteAddress)
+    ) {
+        return {
+            code: 403,
+            message: "当前访问IP无此数据的访问权限"
+        }
+    }
+
+    // 验证密码保护
+    if (storedData.password) {
+        if (password !== storedData.password) {
+            return {
+                code: 401,
+                message: "无效的密码"
+            }
+        }
+    }
 
     const state = await kv.del(uuid.toLowerCase());
 
     return {
         code: state == 1 ? 200: 400,
-        message: `${state == 1 ? '删除成功': '删除失败，无此存储'}`
+        message: `${state == 1 ? '删除成功': '删除失败'}`
     };
 };
 
