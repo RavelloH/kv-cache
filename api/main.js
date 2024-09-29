@@ -112,7 +112,7 @@ const writeData = async (req) => {
       data: data,
       ip: safeIP || "*.*.*.*",
       password: password,
-      expiredTime: parseInt(expiredTime)+Date.now(),
+      expiredTime: parseInt(expiredTime) + Date.now(),
     },
     {
       px: parseInt(expiredTime),
@@ -344,6 +344,7 @@ export default async function handler(req, res) {
     } else if (req.method === "GET") {
       if (req.query.uuid) {
         // get查询模式
+        res.setHeader("Content-Type", "text/plain");
         res
           .status(200)
           .send(
