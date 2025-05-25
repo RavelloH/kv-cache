@@ -344,7 +344,9 @@ export default async function handler(req, res) {
     } else if (req.method === "GET") {
       if (req.query.uuid) {
         // get查询模式
-        res.setHeader("Content-Type", "text/plain");
+        res.setHeader("Content-Type", 
+          req.query.type ? "text/"+req.query.type : "text/plain"
+        );
         res
           .status(200)
           .send(
