@@ -8,7 +8,8 @@ compatibility_date = "2025-12-16"
 # KV 命名空间绑定
 [[kv_namespaces]]
 binding = "KV_CACHE"
-id = "your_kv_namespace_id_here"
+# id = "your_kv_namespace_id_here"
+id = "9dc3182b7f32411b97998692c787eb63"
 
 # 生产环境配置（可选）
 # [env.production]
