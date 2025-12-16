@@ -1,10 +1,16 @@
 {
   "name": "kv-cache",
-  "version": "1.0.0",
-  "description": "基于api进行操作的缓存系统",
+  "version": "1.2.0",
+  "description": "基于api进行操作的缓存系统，支持 Vercel 和 Cloudflare 部署",
   "main": "api/main.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:vercel": "vercel dev",
+    "dev:cloudflare": "wrangler dev",
+    "deploy:vercel": "vercel --prod",
+    "deploy:cloudflare": "wrangler deploy",
+    "migrate": "node scripts/migrate.js"
   },
   "repository": {
     "type": "git",
@@ -20,5 +26,9 @@
     "@vercel/client": "^13.0.6",
     "@vercel/kv": "^1.0.0",
     "@vercel/ncc": "^0.38.1"
+  },
+  "devDependencies": {
+    "wrangler": "^3.80.0",
+    "dotenv": "^16.4.5"
   }
 }

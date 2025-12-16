@@ -1,0 +1,27 @@
+# Cloudflare Workers 配置文件
+# 详见：https://developers.cloudflare.com/workers/wrangler/configuration/
+
+name = "kv-cache"
+main = "workers/index.js"
+compatibility_date = "2025-12-16"
+
+# KV 命名空间绑定
+[[kv_namespaces]]
+binding = "KV_CACHE"
+id = "your_kv_namespace_id_here"
+
+# 生产环境配置（可选）
+# [env.production]
+# name = "kv-cache-production"
+#
+# [[env.production.kv_namespaces]]
+# binding = "KV_CACHE"
+# id = "your_production_kv_namespace_id_here"
+
+# 开发环境配置（可选）
+# [env.development]
+# name = "kv-cache-dev"
+#
+# [[env.development.kv_namespaces]]
+# binding = "KV_CACHE"
+# id = "your_development_kv_namespace_id_here"

@@ -79,6 +79,10 @@ web_modules/
 .env.production.local
 .env.local
 
+# Migration reports
+migration-report.json
+migration-errors.json
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache
@@ -129,3 +133,7 @@ dist
 .yarn/install-state.gz
 .pnp.*
 .vercel
+
+# Wrangler (Cloudflare Workers)
+.wrangler/
+.dev.vars
